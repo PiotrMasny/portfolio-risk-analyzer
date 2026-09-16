@@ -13,16 +13,34 @@ from portfolio_risk_analyzer.metrics import (
 def minimum_variance_weights(
         cov_matrix: pd.DataFrame
 ) -> np.ndarray:
+    """
+    Calculate the long-only minimum-variance portfolio weights.
 
-    num_of_assets = cov_matrix.shape[0]
-    initial_weights = np.ones(num_of_assets) / num_of_assets
+    Parameters
+    ----------
+    cov_matrix : pd.DataFrame
+        Covariance matrix of asset returns.
+
+    Returns
+    -------
+    np.ndarray
+        Portfolio weights that minimize variance, subject to weights
+        summing to 1 and each weight being between 0 and 1.
+
+    Raises
+    ------
+    RuntimeError
+        If the numerical optimization fails.
+    """
+    n_assets = cov_matrix.shape[0]
+    initial_weights = np.ones(n_assets) / n_assets
 
     result = minimize(
         portfolio_variance,
         initial_weights,
         args=(cov_matrix,),
         method='SLSQP',
-        bounds=[(0, 1)] * num_of_assets,
+        bounds=[(0, 1)] * n_assets,
         constraints={
             'type': 'eq',
             'fun': lambda weights: np.sum(weights) - 1
@@ -43,6 +61,26 @@ def _negative_sharpe_ratio(
         cov_matrix: pd.DataFrame,
         risk_free_rate: float
 ) -> float:
+    """
+    Calculate the negative portfolio Sharpe ratio.
+
+    Parameters
+    ----------
+    weights : np.ndarray
+        Portfolio weights in the same asset order as mean_returns and cov_matrix.
+    mean_returns : pd.Series
+        Expected returns for each asset.
+    cov_matrix : pd.DataFrame
+        Covariance matrix of asset returns, expressed on the same basis
+        as mean_returns.
+    risk_free_rate : float
+        Risk-free rate expressed on the same basis as mean_returns.
+
+    Returns
+    -------
+    float
+        Negative portfolio Sharpe ratio.
+    """
     return -sharpe_ratio(
         weights,
         mean_returns,
@@ -56,16 +94,39 @@ def maximum_sharpe_weights(
         cov_matrix: pd.DataFrame,
         risk_free_rate: float
 ) -> np.ndarray:
+    """
+    Calculate the long-only maximum-Sharpe portfolio weights.
 
-    num_of_assets = cov_matrix.shape[0]
-    initial_weights = np.ones(num_of_assets) / num_of_assets
+    Parameters
+    ----------
+    mean_returns : pd.Series
+        Expected returns for each asset.
+    cov_matrix : pd.DataFrame
+        Covariance matrix of asset returns in the same asset order as
+        mean_returns and on the same basis.
+    risk_free_rate : float
+        Risk-free rate expressed on the same basis as mean_returns.
+
+    Returns
+    -------
+    np.ndarray
+        Portfolio weights that maximize the Sharpe ratio, subject to weights
+        summing to 1 and each weight being between 0 and 1.
+
+    Raises
+    ------
+    RuntimeError
+        If the numerical optimization fails.
+    """
+    n_assets = cov_matrix.shape[0]
+    initial_weights = np.ones(n_assets) / n_assets
 
     result = minimize(
         _negative_sharpe_ratio,
         initial_weights,
         args=(mean_returns, cov_matrix, risk_free_rate),
         method='SLSQP',
-        bounds=[(0, 1)] * num_of_assets,
+        bounds=[(0, 1)] * n_assets,
         constraints={
             'type': 'eq',
             'fun': lambda weights: np.sum(weights) - 1
@@ -86,18 +147,45 @@ def minimum_variance_weights_for_return(
         target_return: float,
         initial_weights: np.ndarray | None = None
 ) -> np.ndarray:
+    """
+    Calculate minimum-variance portfolio weights for a target return.
 
-    num_of_assets = cov_matrix.shape[0]
+    Parameters
+    ----------
+    mean_returns : pd.Series
+        Expected returns for each asset.
+    cov_matrix : pd.DataFrame
+        Covariance matrix of asset returns in the same asset order as
+        mean_returns and on the same basis.
+    target_return : float
+        Required portfolio expected return, expressed on the same basis
+        as mean_returns.
+    initial_weights : np.ndarray | None
+        Starting portfolio weights for the numerical optimizer. If None,
+        equal weights are used.
+
+    Returns
+    -------
+    np.ndarray
+        Portfolio weights that minimize variance while achieving the target
+        return, subject to long-only and fully invested constraints.
+
+    Raises
+    ------
+    RuntimeError
+        If the numerical optimization fails.
+    """
+    n_assets = cov_matrix.shape[0]
 
     if initial_weights is None:
-        initial_weights = np.ones(num_of_assets) / num_of_assets
+        initial_weights = np.ones(n_assets) / n_assets
 
     result = minimize(
         portfolio_variance,
         initial_weights,
         args=(cov_matrix,),
         method='SLSQP',
-        bounds=[(0, 1)] * num_of_assets,
+        bounds=[(0, 1)] * n_assets,
         constraints=[
             {
                 'type': 'eq',
@@ -123,6 +211,39 @@ def efficient_frontier(
         cov_matrix: pd.DataFrame,
         n_points: int = 50
 ) -> pd.DataFrame:
+    """
+    Calculate the long-only efficient frontier.
+
+    Parameters
+    ----------
+    mean_returns : pd.Series
+        Expected annual returns for each asset.
+    cov_matrix : pd.DataFrame
+        Annualized covariance matrix of asset returns.
+    n_points : int
+        Number of portfolios used to approximate the efficient frontier.
+
+    Returns
+    -------
+    pd.DataFrame
+        Efficient-frontier portfolios with annual expected return and
+        annual volatility.
+
+    Raises
+    ------
+    RuntimeError
+        If any portfolio optimization fails.
+    ValueError
+        If n_points is less than 2.
+
+    Notes
+    -----
+    The frontier is generated from the minimum-variance portfolio to the
+    maximum expected return under long-only constraints. Each optimization
+    uses the previous portfolio weights as the initial solution.
+    """
+    if n_points < 2:
+        raise ValueError("n_points must be at least 2")
 
     min_var_weights = minimum_variance_weights(cov_matrix)
     min_var_return = portfolio_expected_return(min_var_weights, mean_returns)

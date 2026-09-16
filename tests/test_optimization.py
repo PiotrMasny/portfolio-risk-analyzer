@@ -101,3 +101,16 @@ def test_efficient_frontier(mean_returns, cov_matrix):
     assert np.all(
         np.diff(frontier['annual_volatility']) >= -1e-6
     )
+
+
+@pytest.mark.parametrize(
+    "n_points",
+    [0, 1, -1]
+)
+def test_efficient_frontier_invalid_n_points(mean_returns, cov_matrix, n_points):
+    with pytest.raises(ValueError):
+        efficient_frontier(
+            mean_returns,
+            cov_matrix,
+            n_points=n_points
+        )

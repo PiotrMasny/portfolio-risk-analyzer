@@ -5,6 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "portfolio-risk-analyzer"
 version = "0.1.0"
+description = "Long-only portfolio optimization and risk analysis in Python using Markowitz optimization, VaR, CVaR and drawdown."
+readme = "README.md"
+authors = [
+    { name = "Piotr Masny" }
+]
 requires-python = ">=3.11"
 dependencies = [
     "numpy",
@@ -14,6 +19,7 @@ dependencies = [
     "scipy",
     "yfinance"
 ]
+license = "MIT"
 
 [project.optional-dependencies]
 dev = [
@@ -23,3 +29,6 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+target-version = "py311"

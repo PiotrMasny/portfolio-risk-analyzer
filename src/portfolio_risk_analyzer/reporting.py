@@ -18,7 +18,31 @@ def portfolio_summary(
         risk_free_rate: float,
         confidence_level: float = 0.95
 ) -> pd.Series:
+    """
+    Create a portfolio performance and risk summary.
 
+    Parameters
+    ----------
+    daily_returns : pd.DataFrame
+        Daily asset returns for each observation.
+    weights : np.ndarray
+        Portfolio weights in the same asset order as daily_returns,
+        annual_mean_returns, and annual_cov_matrix.
+    annual_mean_returns : pd.Series
+        Annualized arithmetic mean return for each asset.
+    annual_cov_matrix : pd.DataFrame
+        Annualized covariance matrix of asset returns.
+    risk_free_rate : float
+        Risk-free rate expressed on the same basis as annual_mean_returns.
+    confidence_level : float
+        Confidence level used for historical VaR and CVaR calculations.
+
+    Returns
+    -------
+    pd.Series
+        Portfolio summary containing annual expected return, annual volatility,
+        Sharpe ratio, maximum drawdown, and daily historical VaR and CVaR.
+    """
     portfolio_daily_returns = portfolio_returns(
         daily_returns,
         weights

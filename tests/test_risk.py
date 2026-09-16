@@ -51,6 +51,18 @@ def test_historical_var():
     assert result == pytest.approx(0.04)
 
 
+@pytest.mark.parametrize(
+    "confidence_level",
+    [0, 1, -0.1, 1.1]
+)
+def test_historical_var_invalid_confidence_level(returns, confidence_level):
+    with pytest.raises(ValueError):
+        historical_var(
+            returns,
+            confidence_level=confidence_level
+        )
+
+
 def test_historical_cvar():
     returns = pd.Series([
         -0.05, -0.04, -0.03, -0.02, -0.01,
@@ -64,3 +76,15 @@ def test_historical_cvar():
         returns,
         confidence_level=0.95
     ) == pytest.approx(0.045)
+
+
+@pytest.mark.parametrize(
+    "confidence_level",
+    [0, 1, -0.1, 1.1]
+)
+def test_historical_cvar_invalid_confidence_level(returns, confidence_level):
+    with pytest.raises(ValueError):
+        historical_cvar(
+            returns,
+            confidence_level=confidence_level
+        )
