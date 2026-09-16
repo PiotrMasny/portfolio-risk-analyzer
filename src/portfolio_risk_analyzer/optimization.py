@@ -1,8 +1,13 @@
 import numpy as np
 import pandas as pd
-
 from scipy.optimize import minimize
-from portfolio_risk_analyzer.metrics import portfolio_variance, sharpe_ratio, portfolio_expected_return, portfolio_volatility
+
+from portfolio_risk_analyzer.metrics import (
+    portfolio_expected_return,
+    portfolio_variance,
+    portfolio_volatility,
+    sharpe_ratio,
+)
 
 
 def minimum_variance_weights(

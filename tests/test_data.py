@@ -1,14 +1,14 @@
-import numpy as np
+from unittest.mock import patch
+
 import pandas as pd
 import pytest
 
 from portfolio_risk_analyzer.data import (
-    calculate_returns,
-    annualize_mean_returns,
     annualize_covariance,
-    download_prices
+    annualize_mean_returns,
+    calculate_returns,
+    download_prices,
 )
-from unittest.mock import patch
 
 
 @pytest.fixture

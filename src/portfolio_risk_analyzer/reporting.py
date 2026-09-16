@@ -1,18 +1,13 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from portfolio_risk_analyzer.metrics import (
-    sharpe_ratio,
-    portfolio_returns,
     portfolio_expected_return,
-    portfolio_volatility
+    portfolio_returns,
+    portfolio_volatility,
+    sharpe_ratio,
 )
-
-from portfolio_risk_analyzer.risk import (
-    max_drawdown,
-    historical_var,
-    historical_cvar
-)
+from portfolio_risk_analyzer.risk import historical_cvar, historical_var, max_drawdown
 
 
 def portfolio_summary(

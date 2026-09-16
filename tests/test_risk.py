@@ -1,8 +1,12 @@
-import numpy as np
 import pandas as pd
 import pytest
 
-from portfolio_risk_analyzer.risk import drawdown_series, max_drawdown, historical_var, historical_cvar
+from portfolio_risk_analyzer.risk import (
+    drawdown_series,
+    historical_cvar,
+    historical_var,
+    max_drawdown,
+)
 
 
 @pytest.fixture

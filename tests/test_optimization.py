@@ -3,10 +3,10 @@ import pandas as pd
 import pytest
 
 from portfolio_risk_analyzer.optimization import (
-    minimum_variance_weights,
+    efficient_frontier,
     maximum_sharpe_weights,
+    minimum_variance_weights,
     minimum_variance_weights_for_return,
-    efficient_frontier
 )
 
 
