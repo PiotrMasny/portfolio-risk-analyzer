@@ -97,3 +97,7 @@ def test_efficient_frontier(mean_returns, cov_matrix):
     assert frontier['annual_return'].iloc[-1] == pytest.approx(mean_returns.max())
 
     assert frontier['annual_volatility'].iloc[0] == pytest.approx(frontier['annual_volatility'].min())
+
+    assert np.all(
+        np.diff(frontier['annual_volatility']) >= -1e-6
+    )

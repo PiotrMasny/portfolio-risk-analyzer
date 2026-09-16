@@ -6,7 +6,7 @@ def calculate_returns(
         prices: pd.DataFrame
 ) -> pd.DataFrame:
 
-    return prices.pct_change().dropna()
+    return prices.pct_change(fill_method=None).dropna()
 
 
 def annualize_mean_returns(

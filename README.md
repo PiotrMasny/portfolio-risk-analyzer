@@ -68,7 +68,7 @@ The final notebook uses a 4% risk-free rate for Sharpe ratio calculations.
 Clone the repository:
 
 ```bash
-git clone <https://github.com/PiotrMasny/portfolio-risk-analyzer.git>
+git clone https://github.com/PiotrMasny/portfolio-risk-analyzer.git
 cd portfolio-risk-analyzer
 ```
 
@@ -80,9 +80,6 @@ pip install -e ".[dev]"
 
 This installs the project together with its development dependencies, including pytest.
 
-```text
-<https://github.com/PiotrMasny/portfolio-risk-analyzer.git>
-```
 
 ## Usage
 
@@ -175,7 +172,7 @@ The current implementation also assumes:
 - no portfolio turnover constraints,
 - no estimation error adjustments,
 - a constant risk-free rate,
-- static portfolio weights over the analyzed historical reconstruction.
+- constant target weights with daily rebalancing.
 
 Historical VaR and CVaR are based on the empirical distribution of past daily returns and do not guarantee future loss limits.
 
