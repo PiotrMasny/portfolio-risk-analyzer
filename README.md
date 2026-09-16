@@ -1,5 +1,7 @@
 # Portfolio Risk Analyzer
 
+![Tests](https://github.com/PiotrMasny/portfolio-risk-analyzer/actions/workflows/tests.yml/badge.svg)
+
 A Python-based portfolio optimization and risk analysis project using historical market data.
 
 The project compares Minimum Variance and Maximum Sharpe portfolios under long-only constraints and evaluates their asset allocation, expected return, volatility, drawdown and historical tail risk.
