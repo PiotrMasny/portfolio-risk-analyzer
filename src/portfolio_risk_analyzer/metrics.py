@@ -107,8 +107,6 @@ def portfolio_volatility(
         If the covariance matrix is not square or the number of weights
         does not match the number of assets.
     """
-    _validate_cov_matrix_is_square(cov_matrix)
-
     return float(np.sqrt(portfolio_variance(weights, cov_matrix)))
 
 
@@ -143,8 +141,6 @@ def sharpe_ratio(
         If the covariance matrix is not square or the number of weights
         does not match the number of assets.
     """
-    _validate_cov_matrix_is_square(cov_matrix)
-
     return float(
         (portfolio_expected_return(weights, mean_returns) - risk_free_rate)
         /

@@ -17,11 +17,16 @@ The project compares Minimum Variance and Maximum Sharpe portfolios under long-o
 - Historical VaR and CVaR
 - Maximum drawdown analysis
 - Unit tests with `pytest`
+- Code linting with `Ruff`
+- Continuous integration with GitHub Actions
 
 ## Project Structure
 
 ```text
 portfolio-risk-analyzer/
+├── .github/
+│   └── workflows/
+│       └── tests.yml
 ├── src/
 │   └── portfolio_risk_analyzer/
 │       ├── data.py
@@ -33,6 +38,7 @@ portfolio-risk-analyzer/
 ├── notebooks/
 │   ├── 01_exploratory_analysis.ipynb
 │   └── 02_portfolio_analysis.ipynb
+├── LICENSE
 ├── README.md
 ├── pyproject.toml
 └── .gitignore
@@ -80,7 +86,7 @@ Create and activate a virtual environment, then install the project in editable 
 pip install -e ".[dev]"
 ```
 
-This installs the project together with its development dependencies, including pytest.
+This installs the project together with its development dependencies, including pytest and Ruff.
 
 
 ## Usage
@@ -153,11 +159,14 @@ The results illustrate that minimizing volatility does not necessarily minimize 
 
 The project includes unit tests for data processing, portfolio metrics, optimization, reporting and risk calculations.
 
-Run the test suite with:
+Run linting and tests with:
 
 ```bash
+ruff check .
 pytest
 ```
+
+GitHub Actions automatically runs both Ruff and pytest on pushes and pull requests.
 
 External market-data access is mocked in the relevant tests so that the test suite does not depend on a live Yahoo Finance connection.
 
@@ -191,6 +200,10 @@ Potential extensions include:
 - dynamic risk-free rates,
 - comparison with benchmark and equal-weight portfolios,
 - additional risk and return estimation methods.
+
+## License
+
+This project is licensed under the MIT License.
 
 ## Disclaimer
 
